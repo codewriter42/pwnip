@@ -16,7 +16,7 @@ PwnIP requires Python 3 and Git. Install them with:
 
 Get the latest version from GitHub:
 
-<code>git clone https://github.com/yourusername/pwnip.git</code>
+<code>git clone https://github.com/codewriter42/pwnip.git</code>
 
 4️⃣ Navigate to the tool directory
 
