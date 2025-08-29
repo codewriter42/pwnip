@@ -22,7 +22,7 @@ Get the latest version from GitHub:
 
 Change into the cloned folder:
 
-<code>cd PwnIP</code>
+<code>cd pwnip</code>
 
 5️⃣ Install Python dependencies
 
