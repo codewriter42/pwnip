@@ -3,7 +3,6 @@ from rich.table import Table
 from rich.prompt import Prompt
 from rich.panel import Panel
 import requests
-import whois
 import socket
 import os
 
@@ -27,15 +26,27 @@ def ip_lookup(ip):
     except Exception as e:
         console.print(f"[red]Hata: {e}[/red]")
 
-def whois_lookup(domain_or_ip):
+def whois_lookup(domain):
     try:
-        w = whois.whois(domain_or_ip)
-        table = Table(title=f"PwnIP - WHOIS Lookup: {domain_or_ip}")
-        table.add_column("Field", style="cyan")
-        table.add_column("Value", style="magenta")
-        for key, value in w.items():
-            table.add_row(str(key), str(value))
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect(("whois.verisign-grs.com", 43))
+        s.send((domain + "\r\n").encode())
+        response = b""
+        while True:
+            data = s.recv(4096)
+            if not data:
+                break
+            response += data
+        s.close()
+
+ 
+        table = Table(title=f"PwnIP - WHOIS Lookup: {domain}")
+        table.add_column("Response", style="magenta")
+        for line in response.decode(errors="ignore").splitlines():
+            if line.strip():
+                table.add_row(line.strip())
         console.print(table)
+
     except Exception as e:
         console.print(f"[red]WHOIS hatası: {e}[/red]")
 
@@ -56,7 +67,7 @@ def clear():
 def main():
     while True:
         clear()
-        console.print(Panel.fit("[bold yellow]PwnIP v1.0[/bold yellow]\nBy: Kanka Labs", title="[bold green]Ana Menü[/bold green]"))
+        console.print(Panel.fit("[bold yellow]PwnIP v1.1[/bold yellow]\nBy: Kanka Labs", title="[bold green]Ana Menü[/bold green]"))
         console.print("\n[cyan]1.[/cyan] IP Lookup")
         console.print("[cyan]2.[/cyan] WHOIS Lookup")
         console.print("[cyan]3.[/cyan] Reverse DNS")
@@ -79,6 +90,7 @@ def main():
         
         console.print("\n[bold green]Devam etmek için Enter tuşuna basın...[/bold green]")
         input()
+
 
 
 if _name_ == "_main_":
