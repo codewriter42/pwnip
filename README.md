@@ -55,3 +55,4 @@ Requires internet connection to fetch IP and domain info.
 Make sure Python 3 is installed and updated.
 
 To exit the tool, simply choose the “Exit” option in the menu.
+You can help us improve the system by sharing your errors with us at <mail>codewriter@proton.me</mail> . Thank you...
