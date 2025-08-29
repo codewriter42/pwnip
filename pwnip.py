@@ -67,7 +67,7 @@ def clear():
 def main():
     while True:
         clear()
-        console.print(Panel.fit("[bold yellow]PwnIP v1.1[/bold yellow]\nBy: Kanka Labs", title="[bold green]Ana Menü[/bold green]"))
+        console.print(Panel.fit("[bold yellow]PwnIP v1[/bold yellow]\nBy: codewriter42", title="[bold green]Ana Menü[/bold green]"))
         console.print("\n[cyan]1.[/cyan] IP Lookup")
         console.print("[cyan]2.[/cyan] WHOIS Lookup")
         console.print("[cyan]3.[/cyan] Reverse DNS")
