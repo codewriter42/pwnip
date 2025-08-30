@@ -22,16 +22,16 @@ def ip_lookup(ip):
                 table.add_row(key, str(res[key]))
             console.print(table)
         else:
-            console.print(f"[red]IP sorgusu başarısız: {res['message']}[/red]")
+            console.print(f"[red]IP lookup failed: {res['message']}[/red]")
     except Exception as e:
-        console.print(f"[red]Hata: {e}[/red]")
+        console.print(f"[red]Error: {e}[/red]")
 
 def reverse_dns(ip):
     try:
         host = socket.gethostbyaddr(ip)
         console.print(f"[green]PwnIP - Reverse DNS: {host[0]}[/green]")
     except Exception as e:
-        console.print(f"[red]Reverse DNS hatası: {e}[/red]")
+        console.print(f"[red]Reverse DNS error: {e}[/red]")
 
 
 def port_scan(ip, start_port=1, end_port=1024):
@@ -57,9 +57,35 @@ def port_scan(ip, start_port=1, end_port=1024):
         console.print(f"[red]No open ports found on {ip}[/red]")
 
 
-def wifi_users(subnet="192.168.1."):
+def get_local_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+    finally:
+        s.close()
+    return ip
+
+
+def get_mac_vendor(mac):
+    mac_prefix = mac.upper()[0:8]  # First 3 octets
+    oui_db = {
+        "00:1A:2B": "Apple, Inc.",
+        "00:1B:63": "Apple, Inc.",
+        "00:1C:B3": "Cisco Systems",
+        "00:1D:D8": "Samsung Electronics",
+        "00:1E:65": "Intel Corp",
+        "FC:FB:FB": "Xiaomi Communications",
+        "F0:99:B6": "Huawei Technologies"
+    }
+    return oui_db.get(mac_prefix, "Unknown Vendor")
+
+def wifi_users():
+    local_ip = get_local_ip()
+    subnet = ".".join(local_ip.split(".")[:3]) + "."
     console.print(f"[bold yellow]Scanning devices on subnet {subnet}0/24...[/bold yellow]")
     alive_hosts = []
+
     for i in range(1, 255):
         ip = f"{subnet}{i}"
         try:
@@ -68,14 +94,34 @@ def wifi_users(subnet="192.168.1."):
                 stdout=subprocess.DEVNULL
             )
             if result.returncode == 0:
-                alive_hosts.append(ip)
+           
+                try:
+                    host = socket.gethostbyaddr(ip)[0]
+                except:
+                    host = "Unknown"
+
+              
+                mac = "Unknown"
+                try:
+                    arp_out = subprocess.check_output(["arp", "-n", ip]).decode()
+                    if ":" in arp_out:
+                        mac = arp_out.split()[2]
+                except:
+                    pass
+
+                vendor = get_mac_vendor(mac) if mac != "Unknown" else "Unknown"
+                alive_hosts.append((ip, host, mac, vendor))
         except:
             pass
+
     if alive_hosts:
-        table = Table(title="Devices Found in Wi-Fi")
-        table.add_column("IP Address", style="magenta")
-        for host in alive_hosts:
-            table.add_row(host)
+        table = Table(title=f"Devices Found in Wi-Fi ({subnet}0/24)")
+        table.add_column("IP Address", style="cyan")
+        table.add_column("Hostname", style="magenta")
+        table.add_column("MAC Address", style="green")
+        table.add_column("Vendor", style="yellow")
+        for ip, host, mac, vendor in alive_hosts:
+            table.add_row(ip, host, mac, vendor)
         console.print(table)
     else:
         console.print("[red]No devices found on the network[/red]")
@@ -118,8 +164,7 @@ def main():
                     port_scan(ip)
                     input("\nPress Enter to continue...")
                 elif sub_choice == "2":
-                    subnet = Prompt.ask("Enter subnet (default 192.168.1.)", default="192.168.1.")
-                    wifi_users(subnet)
+                    wifi_users()
                     input("\nPress Enter to continue...")
                 elif sub_choice == "3":
                     break
