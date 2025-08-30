@@ -1,58 +1,65 @@
 # PwnİP
 
-1️⃣ Update your Termux packages
+📌 PwnIP v1.1
 
-Before installing anything, make sure your Termux environment is up-to-date:
+A simple yet powerful OSINT and network tool for Termux & Linux.
+With PwnIP you can quickly gather information about IPs, run reverse DNS checks, scan open ports, and even discover devices connected to your Wi-Fi network.
 
-<code>pkg update && pkg upgrade -y</code>
 
-2️⃣ Install Python and Git
+✨ Features
 
-PwnIP requires Python 3 and Git. Install them with:
+🔍 IP Lookup → Get country, city, ISP, and organization info about any IP.
 
-<code>pkg install python git -y</code>
+🌐 Reverse DNS → Find the domain/hostname of an IP.
 
-3️⃣ Clone the PwnIP repository
+🚀 Port Scan (Nmap-like) → Scan a target IP for open ports.
 
-Get the latest version from GitHub:
+📡 Wi-Fi Users Discovery → Detect devices connected to your Wi-Fi (LAN scan).
 
-<code>git clone https://github.com/codewriter42/pwnip.git</code>
 
-4️⃣ Navigate to the tool directory
+⚙ Installation
 
-Change into the cloned folder:
+Clone the repo:
 
-<code>cd pwnip</code>
+<code>git clone https://github.com/yourusername/pwnip.git
+cd pwnip</code>
 
-5️⃣ Install Python dependencies
-
-PwnIP uses some Python packages. Install them via pip:
+Install dependencies:
 
 <code>pip install -r requirements.txt</code>
 
-> Dependencies include:
+For Termux, make sure you have ping:
 
-requests – for API calls
+<code>pkg install iputils -y</code>
 
-whois – for domain info
-
-rich – for colorful terminal interface
-
-6️⃣ Run PwnIP
-
-Start the tool with Python 3:
+Run the tool:
 
 <code>python pwnip.py</code>
 
-You should now see the colorful PwnIP menu. Select options to perform IP Lookup, WHOIS Lookup, or Reverse DNS.
+📂 Requirements
 
-7️⃣ Notes
+requests
+rich
 
-Works best on Termux and Linux terminals.
+🖥 Usage Example
 
-Requires internet connection to fetch IP and domain info.
+Main Menu:
 
-Make sure Python 3 is installed and updated.
+1. IP Lookup
+2. Reverse DNS
+3. Port & Network Tools
+4. Exit
+
+Port & Network Tools Menu:
+
+1. Port Scan
+2. Wi-Fi Users Discovery
+3. Back
+
+⚠ Disclaimer
+
+This tool is created for educational and ethical purposes only.
+The author takes no responsibility for misuse or illegal activities.
 
 To exit the tool, simply choose the “Exit” option in the menu.
 
