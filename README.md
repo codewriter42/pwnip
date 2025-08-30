@@ -34,11 +34,12 @@ For Termux, make sure you have ping:
 
 Run the tool:
 
-<code>python pwnip.py</code>
+<code>python3 pwnip.py</code>
 
 📂 Requirements
 
 requests
+
 rich
 
 🖥 Usage Example
